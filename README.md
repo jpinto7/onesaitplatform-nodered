@@ -1,4 +1,4 @@
-# Sofia2 Node-RED
+# OnesaitPlatform Node-RED
 
 *Read this in other languages: [English](README.md), [Spanish](README.es.md).*
 
