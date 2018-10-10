@@ -13,14 +13,13 @@ module.exports = function(RED) {
 		node.clientPlatform = config.clientPlatform;
 		node.clientPlatformId = config.clientPlatformId;
 		node.token = config.token;
-		node.renovation = config.renovation;
+		node.timeout = config.timeout || 1000;
+		node.retries = config.retries || 1;
 		node.sessionKey = '';
 		node.isConnected = false;
 		node.generateSession = generateSession;
 		node.getSessionKey = getSessionKey;
 		node.axiosAgent = createAgent();
-		//Para detener el intervalo de renovación de sesión
-		const testConnectionInterval = null;
 
 		function generateSession() {
 			console.log('Generating sessionKey...');
@@ -42,6 +41,7 @@ module.exports = function(RED) {
 			return axios.create({
 				baseURL: node.endpoint,
 				responseType: 'json',
+				timeout: node.timeout,
 				httpsAgent: new https.Agent({  
 					rejectUnauthorized: false
 				})
@@ -50,15 +50,13 @@ module.exports = function(RED) {
 
 		//Se invoca al cerrar y al redesplegar el flujo
 		node.on('close', function () {
-			console.log('Leaving...');
-			clearInterval(testConnectionInterval);
+			console.log('Disconnecting...');
 
 			if (node.sessionKey) {
 				restClient.leave(node.axiosAgent, { sessionKey } = node)
 				.then(message => {
-					if (message === 'Disconnect') {
-						console.log('Disconnection successful');
-					}
+					console.log(`Disconnection message: ${message}`);
+					console.log('Disconnection successful');
 				})
 				.catch(error => {
 					if (error.response) {

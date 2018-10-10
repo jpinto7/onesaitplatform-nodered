@@ -1,5 +1,4 @@
 module.exports = function(RED) {
-	const axios = require('../lib/axiosInstance');
 	const restClient = require('../lib/IoTClientREST');
 
 	function OnesaitPlatformInsert(config) {
@@ -8,7 +7,7 @@ module.exports = function(RED) {
 		const server = RED.nodes.getNode(config.server);
 		node.ontology = config.ontology;
 
-	  function insertData(data, ontology, tries) {
+	  function insertOntology(data, ontology, tries) {
 			return new Promise((resolve, reject) => {
 				function insert() {
 					restClient.insert(server.axiosAgent, {
@@ -17,8 +16,8 @@ module.exports = function(RED) {
 					}).then(response => {
 						resolve(response);
 					}).catch((error) => {
-						console.log('huhu');
-						if (error.response && error.response.status === 401 && tries-- > 0) {
+						if (((error.response && error.response.status === 401) || error.code === 'ECONNABORTED') && tries-- > 0) {
+							console.log('Retrying...');
 							retryInsert();
 						} else {
 							reject(error);
@@ -32,8 +31,7 @@ module.exports = function(RED) {
 						insert();
 					})
 					.catch((error) => {
-						if (error.response && error.response.status === 401) {
-							console.log('Retrying...');
+						if ((error.response && error.response.status === 401) || error.code === 'ECONNABORTED') {
 							insert();							
 						} else {
 							reject(error);
@@ -58,7 +56,7 @@ module.exports = function(RED) {
 				console.log(`Using ontology: ${ontology}`);
 				
 				if (protocol.toUpperCase() == 'REST'.toUpperCase()) {
-					insertData(msg.payload, ontology, 5)
+					insertOntology(msg.payload, ontology, server.retries)
 						.then(response => {
 							msg.payload = response;
 							node.send(msg);
