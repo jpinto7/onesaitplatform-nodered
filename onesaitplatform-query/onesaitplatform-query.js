@@ -12,10 +12,10 @@ module.exports = function(RED) {
 		node.queryType = node.queryType;
 
 		function queryOntology() {
-			
+
 		}
 
-		node.on('input', function(msg) {
+		node.on('input', function (msg) {
 			var ontologia = "";
 			var queryType = "";
 			var query = "";

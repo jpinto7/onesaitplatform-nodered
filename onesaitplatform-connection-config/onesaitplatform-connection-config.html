@@ -1,96 +1,84 @@
 <html>
-<script type="text/javascript">
-  RED.nodes.registerType('onesaitplatform-config', {
-    category: 'config',
-    defaults: {
-      protocol: {
-        value: ''
+  <script type="text/javascript">
+    RED.nodes.registerType('onesaitplatform-config', {
+      category: 'config',
+      defaults: {
+        protocol: {
+          value: ''
+        },
+        clientPlatform: {
+          value: ''
+        },
+        clientPlatformId: {
+          value: ''
+        },
+        token: {
+          value: ''
+        },
+        timeout: {
+          value: ''
+        },
+        retries: {
+          value: ''
+        },
+        endpoint: {
+          value: ''
+        }
       },
-      clientPlatform: {
-        value: ''
+      label: function() {
+        return this.endpoint + ' as ' + this.clientPlatform + ':' + this.clientPlatformId;
       },
-      clientPlatformId: {
-        value: ''
-      },
-      token: {
-        value: ''
-      },
-      timeout: {
-        value: ''
-      },
-      retries: {
-        value: ''
-      },
-      endpoint: {
-        value: ''
+      oneditprepare: function() {
+        $('.node-config-timeout').spinner({
+          min: 50,
+          max: 120000,
+          decimals: 0
+        });
+        $('.node-config-retries').spinner({
+          min: 1,
+          max: 10,
+          decimals: 0
+        });
       }
-    },
-    label: function() {
-      return this.endpoint + ' as ' + this.clientPlatform + ':' + this.clientPlatformId;
-    },
-    oneditprepare: function() {
-      $('.node-config-timeout').spinner({
-        min: 50,
-        max: 120000,
-        decimals: 0
-      });
-      $('.node-config-retries').spinner({
-        min: 1,
-        max: 10,
-        decimals: 0
-      });
-    }
-  });
-</script>
-
-<script type="text/x-red" data-template-name="onesaitplatform-config">
-  <div class="form-row">
-    <label for="node-config-input-protocol"><i class="icon-bookmark"></i> Protocol</label>
-    <select type="text" id="node-config-input-protocol">
-      <!--<option value="MQTT">MQTT</option>-->
-      <option value="REST">REST</option>
-      <!--option value="WEBSOCKET">WEBSOCKET</option-->
-    </select>
-  </div>
-	<div class="form-row hidden" id="div-ip" style="display:none;">
-    <label> </label>
-    <label for="node-config-input-ip">IP</label>
-    <input type="text" style="width:213px" id="node-config-input-ip" placeholder="IP">
-  </div>
-	<div class="form-row hidden" id="div-endpoint">
-    <label for="node-config-input-endpoint"><i class="icon-bookmark"></i> Endpoint</label>
-    <input type="text" style="width:213px" id="node-config-input-endpoint" placeholder="Endpoint">
-  </div>
-	<div class="form-row hidden" id="div-port" style="display:none;">
-    <label> </label>
-    <label for="node-config-input-port"> Port</label>
-    <input type="text" style="width:213px" id="node-config-input-port" placeholder="Port">
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-clientPlatform"><i class="icon-bookmark"></i> IoT Client</label>
-    <input type="text" id="node-config-input-clientPlatform" placeholder="IoT Client">
-  </div>
-	<div class="form-row">
-    <label for="node-config-input-clientPlatformId"><i class="icon-file"></i> IoT Client Instance</label>
-    <input type="text" id="node-config-input-clientPlatformId" placeholder="IoT Client Instance">
-  </div>
-	<div class="form-row">
-    <label for="node-config-input-token"><i class="icon-bookmark"></i> Token</label>
-    <input type="text" id="node-config-input-token" placeholder="Token">
-  </div>
-	<div class="form-row">
-    <label for="node-config-input-timeout"><i class="icon-bookmark"></i> Timeout</label>
-    <input id="node-config-input-timeout" class="node-config-timeout" value="1000"></input>
-    <label>miliseconds</label>
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-retries"><i class="icon-bookmark"></i> Retries</label>
-    <input id="node-config-input-retries" class="node-config-retries" value="1"></input>
-  </div>
-</script>
-
-<script type="text/x-red" data-help-name="onesaitplatform-config">
-  <p>Configuration for the conexion:</p>
+    });
+  </script>
+  <script type="text/x-red" data-template-name="onesaitplatform-config">
+    <div class="form-row">
+      <label for="node-config-input-protocol"><i class="icon-bookmark"></i> Protocol</label>
+      <select type="text" id="node-config-input-protocol">
+        <!--<option value="MQTT">MQTT</option>-->
+        <option value="REST">REST</option>
+        <!--option value="WEBSOCKET">WEBSOCKET</option-->
+      </select>
+    </div>
+    <div class="form-row" id="div-endpoint">
+      <label for="node-config-input-endpoint"><i class="icon-bookmark"></i> Endpoint</label>
+      <input type="text" style="width:213px" id="node-config-input-endpoint" placeholder="Endpoint">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-clientPlatform"><i class="icon-bookmark"></i> IoT Client</label>
+      <input type="text" id="node-config-input-clientPlatform" placeholder="IoT Client">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-clientPlatformId"><i class="icon-file"></i> IoT Client Instance</label>
+      <input type="text" id="node-config-input-clientPlatformId" placeholder="IoT Client Instance">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-token"><i class="icon-bookmark"></i> Token</label>
+      <input type="text" id="node-config-input-token" placeholder="Token">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-timeout"><i class="icon-bookmark"></i> Timeout</label>
+      <input id="node-config-input-timeout" class="node-config-timeout" value="1000"></input>
+      <label>miliseconds</label>
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-retries"><i class="icon-bookmark"></i> Retries</label>
+      <input id="node-config-input-retries" class="node-config-retries" value="1"></input>
+    </div>
+  </script>
+  <script type="text/x-red" data-help-name="onesaitplatform-config">
+    <p>Configuration for the conexion:</p>
 		<p><code>Protocol</code> Select the protocol between: MQTT, REST, WEBSOCKET</p>
     <p><code>IoT Client</code> It is used to indicate the IoT Client to be referenced.</p>
     <p><code>IoT Client Instance</code> It is used to indicate the IoT Client instance to be referenced.</p>

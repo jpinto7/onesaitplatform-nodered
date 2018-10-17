@@ -17,34 +17,39 @@ module.exports = function(RED) {
 						resolve(response);
 					}).catch((error) => {
 						if (((error.response && error.response.status === 401) || error.code === 'ECONNABORTED') && tries-- > 0) {
-							console.log('Retrying...');
-							retryInsert();
+							console.log('Retrying insert...');
+							tryInsert();
 						} else {
 							reject(error);
 						}
 					});
 				}
 
-				function retryInsert() {
-					server.generateSession()
-					.then(() => {
+				function tryInsert() {
+					if (server.isConnected) {
 						insert();
-					})
-					.catch((error) => {
-						if ((error.response && error.response.status === 401) || error.code === 'ECONNABORTED') {
-							insert();							
+					} else {
+						if (server.retries === tries) {
+							console.log('No previous sessionKey');
 						} else {
-							reject(error);
+							console.log('Retrying sessionKey generation...');
 						}
-					});					
+						server.generateSession()
+						.then(() => {
+							insert();
+						})
+						.catch((error) => {
+							console.log('error', error);
+							if (((error.response && error.response.status === 401) || error.code === 'ECONNABORTED') && tries-- > 0) {
+								tryInsert();							
+							} else {
+								reject(error);
+							}
+						});
+					}					
 				}
 
-				if (server.sessionKey) {
-					insert();
-				} else {
-					console.log('No previous sessionKey');
-					retryInsert();
-				}
+				tryInsert();
 			});
 		};
 		

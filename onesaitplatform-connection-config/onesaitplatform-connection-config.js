@@ -16,24 +16,31 @@ module.exports = function(RED) {
 		node.timeout = config.timeout || 1000;
 		node.retries = config.retries || 1;
 		node.sessionKey = '';
+		node.isConnecting = false;
 		node.isConnected = false;
 		node.generateSession = generateSession;
-		node.getSessionKey = getSessionKey;
 		node.axiosAgent = createAgent();
 
 		function generateSession() {
 			console.log('Generating sessionKey...');
 			return new Promise((resolve, reject) => {
-				restClient.join(node.axiosAgent, { token, clientPlatform, clientPlatformId } = node)
-				.then(sessionKey => {
-					node.sessionKey = sessionKey;
-					node.isConnected = true;
+				if (node.isConnecting) {
 					resolve();
-					console.log(`Connection successful with sessionKey: ${sessionKey}`);
-				})
-				.catch(error => {
-					reject(error);
-				});
+				} else {
+					node.isConnecting = true;
+					restClient.join(node.axiosAgent, { token, clientPlatform, clientPlatformId } = node)
+					.then(sessionKey => {
+						node.sessionKey = sessionKey;
+						node.isConnected = true;
+						node.isConnecting = false;
+						console.log(`Connection successful with sessionKey: ${sessionKey}`);
+						resolve();
+					})
+					.catch(error => {
+						node.isConnecting = false;
+						reject(error);
+					});					
+				}
 			});
 		}
 
@@ -52,7 +59,7 @@ module.exports = function(RED) {
 		node.on('close', function () {
 			console.log('Disconnecting...');
 
-			if (node.sessionKey) {
+			if (node.isConnected) {
 				restClient.leave(node.axiosAgent, { sessionKey } = node)
 				.then(message => {
 					console.log(`Disconnection message: ${message}`);
@@ -65,13 +72,13 @@ module.exports = function(RED) {
 					} else {
 						console.log('Error message', error.message);
 					}
+				})
+				.finally(() => {
+					node.sessionKey = '';
+					node.isConnected = false;
 				});
 			}
 		});
-
-		function getSessionKey() {
-			return node.sessionKey;
-		}
 	}
 
 	RED.nodes.registerType('onesaitplatform-config', OnesaitPlatformConfig);

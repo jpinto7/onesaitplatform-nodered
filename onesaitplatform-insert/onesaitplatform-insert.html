@@ -1,54 +1,53 @@
 <html>
-<script type="text/javascript">
-	RED.nodes.registerType('onesaitplatform-insert', {
-		category: 'onesaitplatform',
-		color: '#C0DEED',
-		defaults: {
-			name: {
-				value: ''
+	<script type="text/javascript">
+		RED.nodes.registerType('onesaitplatform-insert', {
+			category: 'onesaitplatform',
+			color: '#C0DEED',
+			defaults: {
+				name: {
+					value: ''
+				},
+				ontology: {
+					value: ''
+				},
+				server: {
+					value: '',
+					type: 'onesaitplatform-config'
+				},
+				check: {
+					value: false
+				}
 			},
-			ontology: {
-				value: ''
+			inputs: 1,
+			outputs: 1,
+			icon: 'onesaitplatform.png',
+			label: function () {
+				return this.name || 'onesaitplatform-insert';
 			},
-			server: {
-				value: '',
-				type: 'onesaitplatform-config'
-			},
-			check: {
-				value: false
-			}
-		},
-		inputs: 1,
-		outputs: 1,
-		icon: 'onesaitplatform.png',
-		label: function () {
-			return this.name || 'onesaitplatform-insert';
-		},
-		oneditprepare: function () {
-			if ($("#node-input-check").is(':checked')) {
-				$("#node-input-ontology").removeProp('disabled');
-			} else {
-				$("#node-input-ontology").prop('disabled', true);
-				$("#node-input-ontology").val('');
-			}
-
-			$("#node-input-check").click(function () {
-				var check = $("#node-input-check").is(':checked');
-				var ontologia = $("#node-input-ontology").val();
-				if (check) {
+			oneditprepare: function () {
+				if ($("#node-input-check").is(':checked')) {
 					$("#node-input-ontology").removeProp('disabled');
 				} else {
 					$("#node-input-ontology").prop('disabled', true);
 					$("#node-input-ontology").val('');
 				}
 
-			});
-		}
-	});
-</script>
+				$("#node-input-check").click(function () {
+					var check = $("#node-input-check").is(':checked');
+					var ontologia = $("#node-input-ontology").val();
+					if (check) {
+						$("#node-input-ontology").removeProp('disabled');
+					} else {
+						$("#node-input-ontology").prop('disabled', true);
+						$("#node-input-ontology").val('');
+					}
 
-<script type="text/x-red" data-template-name="onesaitplatform-insert">
-	<div class="form-row">
+				});
+			}
+		});
+	</script>
+	<script type="text/x-red" data-template-name="onesaitplatform-insert">
+		<div class="form-row">
 			<label for="node-input-name"><i class="icon-tag"></i> Name</label>
 			<input type="text" id="node-input-name" placeholder="Name">
 		</div>
@@ -63,10 +62,9 @@
 			<label for="node-input-server"><i class="icon-file"></i> Server</label>
 			<input type="text" id="node-input-server" placeholder="Server">
 		</div>
-		<script
 	</script>
-<script type="text/x-red" data-help-name="onesaitplatform-insert">
-	<span><img style="margin-left: 5px;" src="icons/onesaitplatform.png"/><h2 style="display:inline"> onesaitplatform</h2>
+	<script type="text/x-red" data-help-name="onesaitplatform-insert">
+		<span><img style="margin-left: 5px;" src="icons/onesaitplatform.png"/><h2 style="display:inline"> onesaitplatform</h2>
 		<p>Node inserting data in an ontology</p>
 		<p><code>Ontology</code> Name of the ontology if the checkbox is selected, else the name of the ontology have to go in the <code>msg.ontology</code></p>
 		<p><code>msg.payload</code> The data to be inserted in JSON format</p>

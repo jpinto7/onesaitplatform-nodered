@@ -11,7 +11,11 @@
   "node-red": {
     "nodes": {
       "onesaitplatform-connection-config": "onesaitplatform-connection-config/onesaitplatform-connection-config.js",
-      "onesaitplatform-insert": "onesaitplatform-insert/onesaitplatform-insert.js"
+      "onesaitplatform-insert": "onesaitplatform-insert/onesaitplatform-insert.js",
+      "onesaitplatform-delete": "onesaitplatform-delete/onesaitplatform-delete.js",
+      "onesaitplatform-update": "onesaitplatform-update/onesaitplatform-update.js",
+      "onesaitplatform-leave": "onesaitplatform-leave/onesaitplatform-leave.js",
+      "onesaitplatform-query": "onesaitplatform-query/onesaitplatform-query.js"
     }
   },
   "dependencies": {
