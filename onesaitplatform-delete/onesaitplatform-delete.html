@@ -1,54 +1,67 @@
 <html>
 	<script type="text/javascript">
-		RED.nodes.registerType('onesaitplatform-delete',{
+		RED.nodes.registerType('onesaitplatform-delete', {
 			category: 'onesaitplatform',
 			color: '#C0DEED',
 			defaults: {
-				name: {value:""},
-				ontology: {value:""},
-				server: {value:"", type:"onesaitplatform-config"},
-				check: {value:false},
-				query: {value:""},
-				queryType: {value:""}
+				name: {
+					value: ''
+				},
+				ontology: {
+					value: ''
+				},
+				server: {
+					value: '',
+					type: 'onesaitplatform-config'
+				},
+				check: {
+					value: false
+				},
+				query: {
+					value: ''
+				},
+				queryType: {
+					value: ''
+				}
 			},
 			inputs: 1,
-			outputs:1,
-			icon: "onesaitplatform.png",
-			label: function() {
-				return this.name||"onesaitplatform-delete";
+			outputs: 1,
+			icon: 'onesaitplatform.png',
+			label: function () {
+				return this.name || 'onesaitplatform-delete';
 			},
-			oneditprepare: function() {
-				if($("#node-input-check").is(':checked')){
+			oneditprepare: function () {
+				if ($("#node-input-check").is(':checked')) {
 					$("#node-input-ontology").removeProp('disabled');
 					$("#node-input-query").removeProp('disabled');
 					$("#node-input-queryType").removeProp('disabled');
-				}else{   
-					$("#node-input-ontology").prop('disabled',true);
-					$("#node-input-query").prop('disabled',true);
-					$("#node-input-queryType").prop('disabled',true);
-					$("#node-input-ontology").val('');	
+				} else {
+					$("#node-input-ontology").prop('disabled', true);
+					$("#node-input-query").prop('disabled', true);
+					$("#node-input-queryType").prop('disabled', true);
+					$("#node-input-ontology").val('');
 					$("#node-input-query").val('');
 					$("#node-input-queryType").val('');
-				}  
-					
-				$("#node-input-check").click(function() {
+				}
+
+				$("#node-input-check").click(function () {
 					var check = $("#node-input-check").is(':checked');
 					var ontologia = $("#node-input-ontology").val();
-					if(check){	
+					if (check) {
 						$("#node-input-ontology").removeProp('disabled');
 						$("#node-input-query").removeProp('disabled');
 						$("#node-input-queryType").removeProp('disabled');
-					} else{   
-						$("#node-input-ontology").prop('disabled',true);
-						$("#node-input-query").prop('disabled',true);
-						$("#node-input-queryType").prop('disabled',true);
-						$("#node-input-ontology").val('');	
+					} else {
+						$("#node-input-ontology").prop('disabled', true);
+						$("#node-input-query").prop('disabled', true);
+						$("#node-input-queryType").prop('disabled', true);
+						$("#node-input-ontology").val('');
 						$("#node-input-query").val('');
-						$("#node-input-queryType").val('');							
-					}  
-					
+						$("#node-input-queryType").val('');
+					}
+
 				});
-				
+
 			}
 		});
 	</script>
@@ -71,8 +84,8 @@
 		<div class="form-row">
 			<label for="node-input-queryType"><i class="icon-file"></i> Query Type</label>
 			<select id="node-input-queryType" placeholder="Query type" disabled>
-				<option value="SQLLIKE"> SQLLIKE</option>
-				<option value="NATIVE"> NATIVE</option>
+				<option value="SQL">SQL</option>
+				<option value="NATIVE">NATIVE</option>
 			</select>
 		</div>
 		<div class="form-row">
